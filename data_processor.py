@@ -5,12 +5,18 @@ from datetime import datetime, timedelta
 def get_five_games(data, teamA, teamB=None):
     if teamB is None:
         filtered_games = data[
-            ((data["home_team"] == teamA)) | ((data["away_team"] == teamA))
+            (
+                ((data["home_team"] == teamA) | (data["away_team"] == teamA))
+                & (data["tournament"] != "UEFA Euro qualification")
+            )
         ]
     else:
         filtered_games = data[
-            ((data["home_team"] == teamA) & (data["away_team"] == teamB))
-            | ((data["home_team"] == teamB) & (data["away_team"] == teamA))
+            (
+                ((data["home_team"] == teamA) & (data["away_team"] == teamB))
+                | ((data["home_team"] == teamB) & (data["away_team"] == teamA))
+            )
+            & (data["tournament"] != "UEFA Euro qualification")
         ]
 
     # Explicitly modify data row to datetime
@@ -30,7 +36,11 @@ def get_five_games(data, teamA, teamB=None):
         games_with_scores["date"] > twenty_years_ago
     ].head(5)
 
-    return recent_games_with_scores
+    recent_games_with_scores.loc[:, "date"] = pd.to_datetime(filtered_games["date"]).dt.date
+
+    return recent_games_with_scores.loc[
+        :, ["date", "home_team", "away_team", "home_score", "away_score", "tournament"]
+    ].to_string(index=False)
 
 
 def get_qualification_games(data, team):
@@ -46,7 +56,11 @@ def get_qualification_games(data, team):
     two_years_ago = datetime.now() - timedelta(days=2 * 365)
     filtered_games = filtered_games[filtered_games["date"] > two_years_ago]
 
-    return filtered_games
+    filtered_games.loc[:, "date"] = pd.to_datetime(filtered_games["date"]).dt.date
+
+    return filtered_games.loc[
+        :, ["date", "home_team", "away_team", "home_score", "away_score", "tournament"]
+    ].to_string(index=False)
 
 
 def get_top_goal_scorers(goals_data, team):
@@ -55,13 +69,12 @@ def get_top_goal_scorers(goals_data, team):
     two_years_ago = datetime.now() - timedelta(days=2 * 365)
 
     team_goals = goals_data[
-        (goals_data["team"] == team)
-        & (goals_data["date"] > two_years_ago)
+        (goals_data["team"] == team) & (goals_data["date"] > two_years_ago)
     ]
 
     # Filter out own goals
-    team_goals = team_goals[~team_goals['own_goal']]
+    team_goals = team_goals[~team_goals["own_goal"]]
 
-    top_scorers = team_goals['scorer'].value_counts().head(5)
+    top_scorers = team_goals["scorer"].value_counts().head(5)
 
     return top_scorers

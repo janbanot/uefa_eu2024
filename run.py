@@ -2,11 +2,11 @@ import os
 from openai import OpenAI
 import pandas as pd
 from dotenv import load_dotenv
-from data_processor import get_five_games, get_top_goal_scorers, get_qualification_games
+from data_processor import get_five_games, get_qualification_games
 from build_prompt import build_prompt
 
 
-def send_query_to_openai(client, prompt, model="gpt-4o"):
+def send_query_to_openai(client, prompt, model="gpt-4-turbo"):
     response = client.chat.completions.create(
         model=model, messages=[{"role": "system", "content": prompt}]
     )
@@ -27,13 +27,13 @@ if __name__ == "__main__":
     teamA = "Poland"
     teamB = "Netherlands"
 
+    additional_context = "That is teams first match of the Euro 2024 tournament. Lewandowski is injured"
+
     teamA_games = get_five_games(results_data, teamA)
     teamA_quali_games = get_qualification_games(results_data, teamA)
-    teamA_top_scorers = get_top_goal_scorers(goals_data, teamA)
 
     teamB_games = get_five_games(results_data, teamB)
     teamB_quali_games = get_qualification_games(results_data, teamB)
-    teamB_top_scorers = get_top_goal_scorers(goals_data, teamB)
 
     head_to_head_games = get_five_games(results_data, teamA, teamB)
 
@@ -41,15 +41,12 @@ if __name__ == "__main__":
         teamA,
         teamA_games,
         teamA_quali_games,
-        teamA_top_scorers,
         teamB,
         teamB_games,
         teamB_quali_games,
-        teamB_top_scorers,
         head_to_head_games,
+        additional_context
     )
-
-    # print(prompt)
 
     response_text = send_query_to_openai(client, prompt)
     print(response_text)
