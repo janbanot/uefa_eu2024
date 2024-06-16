@@ -6,7 +6,7 @@ from data_processor import get_five_games, get_qualification_games
 from build_prompt import build_prompt
 
 
-def send_query_to_openai(client, prompt, model="gpt-4-turbo"):
+def send_query_to_openai(client, prompt, model="gpt-4o"):
     response = client.chat.completions.create(
         model=model, messages=[{"role": "system", "content": prompt}]
     )
@@ -18,16 +18,16 @@ if __name__ == "__main__":
 
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    results_file_path = "source/results.csv"
+    results_file_path = "data/results.csv"
     results_data = pd.read_csv(results_file_path)
 
-    goals_file_path = "source/goalscorers.csv"
+    goals_file_path = "data/goalscorers.csv"
     goals_data = pd.read_csv(goals_file_path)
 
-    teamA = "Poland"
-    teamB = "Netherlands"
+    teamA = "England"
+    teamB = "Serbia"
 
-    additional_context = "That is teams first match of the Euro 2024 tournament. Lewandowski is injured"
+    additional_context = "That is teams first match of the Euro 2024 tournament"
 
     teamA_games = get_five_games(results_data, teamA)
     teamA_quali_games = get_qualification_games(results_data, teamA)
