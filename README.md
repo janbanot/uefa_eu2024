@@ -12,5 +12,8 @@ UEFA Euro 2024 predictions with help of LLMs.
 - Romania vs Ukraine 1:1 (35% probability) -> 3:0
 - Belgium vs Slovakia 2:0 (40% probability) -> 0:1
 - Austria vs France 1:2 (40% probability) -> 0:1
-- Turkey vs Georgia 2:1 (35% probability)
-- Portugal vs Czech Republic 3:1 (35% probability)
+- Turkey vs Georgia 2:1 (35% probability) -> 3:1
+- Portugal vs Czech Republic 3:1 (35% probability) -> 2:1
+- Croatia vs Albania 2:1 (40% probability)
+- Germany vs Hungary 3:1 (40% probability)
+- Scotland vs Switzerland 1:2 (45% probability)
