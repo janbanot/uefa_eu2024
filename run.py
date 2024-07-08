@@ -24,10 +24,14 @@ if __name__ == "__main__":
     goals_file_path = "data/goalscorers.csv"
     goals_data = pd.read_csv(goals_file_path)
 
-    teamA = "England"
-    teamB = "Serbia"
+    teamA = "Scotland"
+    teamB = "Switzeland"
 
-    additional_context = "That is teams first match of the Euro 2024 tournament"
+    additional_context = """
+        That is teams second match of the Euro 2024 tournament.
+        Switzerland won their first match against Hungary 3:1.
+        Scotland lost their first match against Germany 5:1, so they need to win this match.
+    """
 
     teamA_games = get_five_games(results_data, teamA)
     teamA_quali_games = get_qualification_games(results_data, teamA)
